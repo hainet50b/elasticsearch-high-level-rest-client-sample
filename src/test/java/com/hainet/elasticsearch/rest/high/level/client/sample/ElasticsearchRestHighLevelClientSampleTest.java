@@ -5,6 +5,8 @@ import org.elasticsearch.action.ActionListener;
 import org.elasticsearch.action.DocWriteResponse;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexResponse;
+import org.elasticsearch.action.get.GetRequest;
+import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.RestClient;
@@ -141,7 +143,7 @@ public class ElasticsearchRestHighLevelClientSampleTest {
 
             client.indexAsync(request, new ActionListener<IndexResponse>() {
                 @Override
-                public void onResponse(IndexResponse response) {
+                public void onResponse(final IndexResponse response) {
                     assertThat(response.getIndex(), is("index"));
                     assertThat(response.getType(), is("logs"));
                     assertThat(response.getId(), is("id"));
@@ -154,7 +156,7 @@ public class ElasticsearchRestHighLevelClientSampleTest {
                 }
 
                 @Override
-                public void onFailure(Exception e) {
+                public void onFailure(final Exception e) {
                     throw new RuntimeException(e);
                 }
             });
@@ -162,4 +164,58 @@ public class ElasticsearchRestHighLevelClientSampleTest {
             throw new RuntimeException(e);
         }
     }
+
+    @Test
+    public void getApiSyncTest() {
+        try (final RestHighLevelClient client = new RestHighLevelClient(
+                RestClient.builder(
+                        new HttpHost("localhost", 9200, "http")
+                )
+        )) {
+            final GetRequest request = new GetRequest()
+                    .index("index")
+                    .type("logs")
+                    .id("id");
+
+            final GetResponse response = client.get(request);
+
+            assertThat(response.getIndex(), is("index"));
+            assertThat(response.getType(), is("logs"));
+            assertThat(response.getId(), is("id"));
+        } catch (final IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    public void getApiAsyncTest() {
+        try (final RestHighLevelClient client = new RestHighLevelClient(
+                RestClient.builder(
+                        new HttpHost("localhost", 9200, "http")
+                )
+        )) {
+            final GetRequest request = new GetRequest()
+                    .index("index")
+                    .type("logs")
+                    .id("id");
+
+            client.getAsync(request, new ActionListener<GetResponse>() {
+                @Override
+                public void onResponse(final GetResponse response) {
+                    assertThat(response.getIndex(), is("index"));
+                    assertThat(response.getType(), is("logs"));
+                    assertThat(response.getId(), is("id"));
+                }
+
+                @Override
+                public void onFailure(final Exception e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        } catch (final IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
 }
