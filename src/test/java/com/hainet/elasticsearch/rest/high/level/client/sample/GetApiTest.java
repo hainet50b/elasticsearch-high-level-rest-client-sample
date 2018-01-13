@@ -2,25 +2,15 @@ package com.hainet.elasticsearch.rest.high.level.client.sample;
 
 import org.apache.http.HttpHost;
 import org.elasticsearch.action.ActionListener;
-import org.elasticsearch.action.DocWriteResponse;
-import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
-import org.elasticsearch.action.admin.indices.delete.DeleteIndexResponse;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
-import org.elasticsearch.action.index.IndexRequest;
-import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.common.unit.TimeValue;
-import org.elasticsearch.common.xcontent.XContentBuilder;
-import org.elasticsearch.common.xcontent.XContentFactory;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
-import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -43,6 +33,11 @@ public class GetApiTest {
             assertThat(response.getIndex(), is("index"));
             assertThat(response.getType(), is("logs"));
             assertThat(response.getId(), is("id"));
+
+            if (response.isExists()) {
+                assertThat(response.getSourceAsString(), is(containsString("\"key\": \"value\"")));
+                assertThat(response.getSourceAsMap().get("key"), is("value"));
+            }
         } catch (final IOException e) {
             throw new RuntimeException(e);
         }
@@ -66,6 +61,11 @@ public class GetApiTest {
                     assertThat(response.getIndex(), is("index"));
                     assertThat(response.getType(), is("logs"));
                     assertThat(response.getId(), is("id"));
+
+                    if (response.isExists()) {
+                        assertThat(response.getSourceAsString(), is(containsString("\"key\": \"value\"")));
+                        assertThat(response.getSourceAsMap().get("key"), is("value"));
+                    }
                 }
 
                 @Override
