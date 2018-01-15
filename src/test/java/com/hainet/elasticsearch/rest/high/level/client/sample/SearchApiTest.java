@@ -31,28 +31,25 @@ public class SearchApiTest {
                     .timeout(TimeValue.timeValueMinutes(2));
 
             final SearchRequest request = new SearchRequest()
-                    .indices("index")
-                    .types("logs")
                     .source(builder);
 
             final SearchResponse response = client.search(request);
 
-            System.out.println(response.status());
-            System.out.println(response.getTook());
-            System.out.println(response.isTimedOut());
+            System.out.println("=== HTTP Request ===");
+            System.out.println("status: " + response.status());
+            System.out.println("took: " + response.getTook());
+            System.out.println("timed_out: " +response.isTimedOut());
 
+            System.out.println("\n=== Hits ===");
             final SearchHits hits = response.getHits();
-            System.out.println(hits.getTotalHits());
-            System.out.println(hits.getMaxScore());
+            System.out.println("total_hits: " + hits.getTotalHits());
 
             for (SearchHit hit : hits.getHits()) {
-                System.out.println(hit.getIndex());
-                System.out.println(hit.getType());
-                System.out.println(hit.getId());
-                System.out.println(hit.getScore());
-
-                System.out.println(hit.getSourceAsString());
-                System.out.println(hit.getSourceAsMap().get("key"));
+                System.out.println("\n=== Document ===");
+                System.out.println("index: " + hit.getIndex());
+                System.out.println("type: " + hit.getType());
+                System.out.println("id: " + hit.getId());
+                System.out.println("source: " + hit.getSourceAsString());
             }
         } catch (final IOException e) {
             throw new RuntimeException(e);
