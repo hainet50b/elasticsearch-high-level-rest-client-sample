@@ -1,9 +1,7 @@
 package com.hainet.elasticsearch.rest.high.level.client.sample;
 
 import org.apache.http.HttpHost;
-import org.elasticsearch.action.search.SearchRequest;
-import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.action.search.SearchScrollRequest;
+import org.elasticsearch.action.search.*;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.unit.TimeValue;
@@ -50,6 +48,11 @@ public class SearchScrollApiTest {
                     System.out.println(hit.getSourceAsString());
                 }
             }
+
+            final ClearScrollRequest clearScrollRequest = new ClearScrollRequest();
+            clearScrollRequest.addScrollId(scrollId);
+            final ClearScrollResponse clearScrollResponse = client.clearScroll(clearScrollRequest);
+            System.out.println(clearScrollResponse.isSucceeded());
         } catch (final IOException e) {
             throw new RuntimeException(e);
         }
