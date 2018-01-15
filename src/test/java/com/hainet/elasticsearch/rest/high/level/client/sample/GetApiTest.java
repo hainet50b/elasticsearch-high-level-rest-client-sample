@@ -77,6 +77,4 @@ public class GetApiTest {
             throw new RuntimeException(e);
         }
     }
-
-
 }
