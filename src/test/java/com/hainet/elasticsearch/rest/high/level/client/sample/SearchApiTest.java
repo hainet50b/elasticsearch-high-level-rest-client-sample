@@ -1,6 +1,7 @@
 package com.hainet.elasticsearch.rest.high.level.client.sample;
 
 import org.apache.http.HttpHost;
+import org.elasticsearch.action.ActionListener;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RestClient;
@@ -13,9 +14,6 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.junit.Test;
 
 import java.io.IOException;
-
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 
 public class SearchApiTest {
 
@@ -56,6 +54,35 @@ public class SearchApiTest {
                 System.out.println(hit.getSourceAsString());
                 System.out.println(hit.getSourceAsMap().get("key"));
             }
+        } catch (final IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    public void searchApiAsyncTest() {
+        try (final RestHighLevelClient client = new RestHighLevelClient(
+                RestClient.builder(
+                        new HttpHost("localhost", 9200, "http")
+                )
+        )) {
+            final SearchSourceBuilder builder = new SearchSourceBuilder()
+                    .query(QueryBuilders.matchAllQuery());
+
+            final SearchRequest request = new SearchRequest()
+                    .source(builder);
+
+            client.searchAsync(request, new ActionListener<SearchResponse>() {
+                @Override
+                public void onResponse(SearchResponse searchResponse) {
+                    // do something
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    throw new RuntimeException(e);
+                }
+            });
         } catch (final IOException e) {
             throw new RuntimeException(e);
         }
