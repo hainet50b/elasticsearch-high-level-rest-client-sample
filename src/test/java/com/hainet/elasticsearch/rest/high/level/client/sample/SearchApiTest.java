@@ -38,14 +38,14 @@ public class SearchApiTest {
             System.out.println("=== HTTP Request ===");
             System.out.println("status: " + response.status());
             System.out.println("took: " + response.getTook());
-            System.out.println("timed_out: " +response.isTimedOut());
+            System.out.println("timed_out: " + response.isTimedOut());
 
             System.out.println("\n=== Hits ===");
             final SearchHits hits = response.getHits();
             System.out.println("total_hits: " + hits.getTotalHits());
 
             for (SearchHit hit : hits.getHits()) {
-                System.out.println("\n=== Document ===");
+                System.out.println("\n=== Documents ===");
                 System.out.println("index: " + hit.getIndex());
                 System.out.println("type: " + hit.getType());
                 System.out.println("id: " + hit.getId());
