@@ -29,7 +29,6 @@ public class DeleteIndexApiTest {
 
             DeleteIndexResponse response = client.indices().deleteIndex(request);
             assertThat(response.isAcknowledged(), is(true));
-
         } catch (final IOException e) {
             throw new RuntimeException(e);
         }
