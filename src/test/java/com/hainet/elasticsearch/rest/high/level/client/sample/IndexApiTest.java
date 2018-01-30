@@ -56,7 +56,7 @@ public class IndexApiTest {
                     // .source("user", "hainet",
                     //         "message", "elasticsearch-rest-high-level-client-sample")
 
-            IndexResponse response = client.index(request);
+            final IndexResponse response = client.index(request);
 
             assertThat(response.getIndex(), is("index"));
             assertThat(response.getType(), is("logs"));
