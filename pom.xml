@@ -6,7 +6,7 @@
 
   <groupId>com.hainet</groupId>
   <artifactId>elasticsearch-high-level-rest-client-sample</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.0-SNAPSHOT</version>
   <build>
     <plugins>
       <plugin>
